@@ -1,0 +1,30 @@
+digraph JVG {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fillcolor=lightblue];
+  label="Тестовый граф JVG";
+  fontname="Arial";
+  labelloc=t;
+
+  "doc_0" [label="Сервер\n(система)\nИССЛЕДОВАНИЕ", fillcolor=lightblue];
+  "doc_1" [label="Обновление\n(процесс)\nИССЛЕДОВАНИЕ", fillcolor=lightgreen];
+  "doc_2" [label="Монитор\n(агент)\nИССЛЕДОВАНИЕ", fillcolor=lightyellow];
+  "doc_3" [label="Оптимизация\n(идея)\nИССЛЕДОВАНИЕ", fillcolor=lightpink];
+  "doc_0" -> "Сервер" [label="связан"];
+  "doc_0" -> "Монитор" [label="связан"];
+  "doc_0" -> "входные данные" [label="вход"];
+  "выходные данные" -> "doc_0" [label="выход"];
+  "doc_1" -> "Сервер" [label="связан"];
+  "doc_1" -> "входные условия" [label="вход"];
+  "результат" -> "doc_1" [label="выход"];
+  "doc_2" -> "Сервер" [label="связан"];
+  "doc_2" -> "Оптимизация" [label="связан"];
+  "doc_2" -> "стимулы" [label="вход"];
+  "doc_2" -> "запросы" [label="вход"];
+  "ответы" -> "doc_2" [label="выход"];
+  "действия" -> "doc_2" [label="выход"];
+  "doc_3" -> "смежные идеи" [label="связан"];
+  "doc_3" -> "проблема" [label="вход"];
+  "doc_3" -> "возможность" [label="вход"];
+  "решение" -> "doc_3" [label="выход"];
+  "проект" -> "doc_3" [label="выход"];
+}

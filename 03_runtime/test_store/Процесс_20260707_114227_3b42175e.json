@@ -1,0 +1,53 @@
+{
+  "vectorograph": {
+    "meta": {
+      "version": "1.0",
+      "title": "Тестовый процесс",
+      "date": "2026-07-07",
+      "author": "Тестер",
+      "status": "черновик"
+    },
+    "entity": {
+      "name": "Процесс",
+      "type": "процесс",
+      "purpose": "тестирование Runtime"
+    },
+    "context": {
+      "origin": "тест",
+      "environment": "локальная среда",
+      "dependencies": []
+    },
+    "structure": {
+      "components": [],
+      "layers": []
+    },
+    "relations": {
+      "inputs": [],
+      "outputs": [],
+      "connected_to": []
+    },
+    "logic": {
+      "rules": [],
+      "algorithms": [],
+      "decision_model": []
+    },
+    "state": {
+      "current": "ПРОЕКТИРОВАНИЕ",
+      "problems": [],
+      "risks": []
+    },
+    "actions": {
+      "next_steps": [
+        "протестировать",
+        "развернуть"
+      ],
+      "required_resources": [
+        "сервер"
+      ]
+    },
+    "evolution": {
+      "history": "начало\n[2026-07-07T11:42:27.791734] Переход: ИССЛЕДОВАНИЕ → ПРОЕКТИРОВАНИЕ\n[2026-07-07T11:42:27.791742] Действие выполнено: начало проектирования",
+      "future_versions": []
+    }
+  }
+}

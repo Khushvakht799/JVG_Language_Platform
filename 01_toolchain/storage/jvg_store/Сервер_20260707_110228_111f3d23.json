@@ -1,0 +1,82 @@
+{
+  "vectorograph": {
+    "meta": {
+      "version": "1.0",
+      "title": "Тестовый проект",
+      "date": "2026-07-07",
+      "author": "Архитектор",
+      "status": "черновик"
+    },
+    "entity": {
+      "name": "Сервер",
+      "type": "система",
+      "purpose": "обработка данных"
+    },
+    "context": {
+      "origin": "тестовый проект",
+      "environment": "локальная сеть",
+      "dependencies": [
+        "БД",
+        "API"
+      ]
+    },
+    "structure": {
+      "components": [
+        "ядро",
+        "модули"
+      ],
+      "layers": [
+        "приложение",
+        "сервис"
+      ]
+    },
+    "relations": {
+      "inputs": [
+        "запросы REST"
+      ],
+      "outputs": [
+        "ответы JSON"
+      ],
+      "connected_to": [
+        "база данных"
+      ]
+    },
+    "logic": {
+      "rules": [
+        "обработка ошибок"
+      ],
+      "algorithms": [
+        "поиск"
+      ],
+      "decision_model": [
+        "приоритет по времени"
+      ]
+    },
+    "state": {
+      "current": "ВЫПОЛНЕНИЕ",
+      "problems": [
+        "нет"
+      ],
+      "risks": [
+        "низкий"
+      ]
+    },
+    "actions": {
+      "next_steps": [
+        "протестировать",
+        "развернуть"
+      ],
+      "required_resources": [
+        "сервер",
+        "доступы"
+      ]
+    },
+    "evolution": {
+      "history": "начало проекта",
+      "future_versions": [
+        "v2.0",
+        "v3.0"
+      ]
+    }
+  }
+}

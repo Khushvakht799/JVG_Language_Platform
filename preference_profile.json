@@ -1,0 +1,9 @@
+{
+  "Practicality": 0.98,
+  "TimePriority": 0.9,
+  "ResourceEfficiency": 0.95,
+  "ImplementationFocus": 0.97,
+  "AbstractionTolerance": 0.04999999999999999,
+  "AutomationPreference": 1.0,
+  "RiskTolerance": 0.3
+}

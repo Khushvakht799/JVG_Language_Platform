@@ -1,0 +1,81 @@
+{
+  "vectorograph": {
+    "meta": {
+      "version": "1.0",
+      "title": "",
+      "date": "",
+      "author": "",
+      "status": ""
+    },
+    "entity": {
+      "name": "Тестовая система",
+      "type": "система",
+      "purpose": "проверка пакетного импорта"
+    },
+    "context": {
+      "origin": "тестовый проект",
+      "environment": "локальная среда",
+      "dependencies": [
+        "БД",
+        "API"
+      ]
+    },
+    "structure": {
+      "components": [
+        "ядро",
+        "модули"
+      ],
+      "layers": [
+        "приложение",
+        "сервис"
+      ]
+    },
+    "relations": {
+      "inputs": [
+        "запросы"
+      ],
+      "outputs": [
+        "ответы"
+      ],
+      "connected_to": [
+        "база данных"
+      ]
+    },
+    "logic": {
+      "rules": [
+        "обработка ошибок"
+      ],
+      "algorithms": [
+        "поиск"
+      ],
+      "decision_model": [
+        "приоритет"
+      ]
+    },
+    "state": {
+      "current": "ИССЛЕДОВАНИЕ",
+      "problems": [
+        "нет"
+      ],
+      "risks": [
+        "низкий"
+      ]
+    },
+    "actions": {
+      "next_steps": [
+        "протестировать",
+        "развернуть"
+      ],
+      "required_resources": [
+        "сервер",
+        "доступы"
+      ]
+    },
+    "evolution": {
+      "history": "начало проекта",
+      "future_versions": [
+        "v2.0"
+      ]
+    }
+  }
+}

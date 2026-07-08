@@ -1,0 +1,48 @@
+{
+  "vectorograph": {
+    "meta": {
+      "version": "1.0",
+      "title": "Тест сохранения",
+      "date": "2026-07-07",
+      "author": "Тестер",
+      "status": "черновик"
+    },
+    "entity": {
+      "name": "Тест",
+      "type": "система",
+      "purpose": "проверка сохранения"
+    },
+    "context": {
+      "origin": "тест",
+      "environment": "локальная",
+      "dependencies": []
+    },
+    "structure": {
+      "components": [],
+      "layers": []
+    },
+    "relations": {
+      "inputs": [],
+      "outputs": [],
+      "connected_to": []
+    },
+    "logic": {
+      "rules": [],
+      "algorithms": [],
+      "decision_model": []
+    },
+    "state": {
+      "current": "ИССЛЕДОВАНИЕ",
+      "problems": [],
+      "risks": []
+    },
+    "actions": {
+      "next_steps": [],
+      "required_resources": []
+    },
+    "evolution": {
+      "history": "",
+      "future_versions": []
+    }
+  }
+}

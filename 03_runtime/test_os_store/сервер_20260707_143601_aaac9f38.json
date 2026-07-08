@@ -1,0 +1,51 @@
+{
+  "vectorograph": {
+    "meta": {
+      "version": "1.0",
+      "title": "Системный сбой",
+      "date": "2026-07-07T14:36:01.382970",
+      "author": "мониторинг",
+      "status": "черновик"
+    },
+    "entity": {
+      "name": "сервер",
+      "type": "идея",
+      "purpose": "восстановление работы"
+    },
+    "context": {
+      "origin": "L1",
+      "environment": "система",
+      "dependencies": []
+    },
+    "structure": {
+      "components": [],
+      "layers": []
+    },
+    "relations": {
+      "inputs": [],
+      "outputs": [],
+      "connected_to": []
+    },
+    "logic": {
+      "rules": [],
+      "algorithms": [],
+      "decision_model": []
+    },
+    "state": {
+      "current": "ИССЛЕДОВАНИЕ",
+      "problems": [],
+      "risks": []
+    },
+    "actions": {
+      "next_steps": [
+        "проверить логи",
+        "перезапустить сервис"
+      ],
+      "required_resources": []
+    },
+    "evolution": {
+      "history": "Создано из события: ",
+      "future_versions": []
+    }
+  }
+}
