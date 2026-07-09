@@ -1,0 +1,72 @@
+{
+  "vectorograph": {
+    "meta": {
+      "version": "1.0",
+      "title": "Автоматический перезапуск Проводника Windows",
+      "date": "2026-07-08",
+      "author": "JVG Platform",
+      "status": "готово"
+    },
+    "entity": {
+      "name": "Перезапуск Explorer",
+      "type": "процесс",
+      "purpose": "Автоматическое восстановление работоспособности Проводника Windows"
+    },
+    "context": {
+      "origin": "Сценарий для демонстрации Action Executor",
+      "environment": "Windows 11",
+      "dependencies": [
+        "PowerShell",
+        "CMD"
+      ]
+    },
+    "state": {
+      "current": "ОЖИДАНИЕ",
+      "problems": [],
+      "risks": [
+        "Возможная потеря данных при принудительном завершении процесса"
+      ]
+    },
+    "rules": [
+      {
+        "condition": "state == НЕСТАБИЛЬНО",
+        "action": "run_cmd",
+        "action_params": {
+          "command": "taskkill /f /im explorer.exe && start explorer.exe"
+        },
+        "description": "Принудительно завершает и перезапускает Проводник"
+      },
+      {
+        "condition": "state == НЕСТАБИЛЬНО",
+        "action": "run_powershell",
+        "action_params": {
+          "command": "Write-Host 'Проводник перезапущен JVG'"
+        },
+        "description": "Отправляет уведомление в консоль"
+      }
+    ],
+    "triggers": [
+      {
+        "event": "system_unstable",
+        "from": "ОЖИДАНИЕ",
+        "to": "НЕСТАБИЛЬНО",
+        "action": "запустить_восстановление"
+      }
+    ],
+    "actions": {
+      "next_steps": [
+        "Перевести документ в состояние НЕСТАБИЛЬНО для активации правил"
+      ],
+      "required_resources": [
+        "Права администратора для taskkill"
+      ]
+    },
+    "evolution": {
+      "history": "Создан как демонстрационный пример",
+      "future_versions": [
+        "Добавить проверку, что explorer.exe действительно перезапустился",
+        "Добавить уведомление в Telegram"
+      ]
+    }
+  }
+}

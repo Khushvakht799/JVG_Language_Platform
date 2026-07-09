@@ -8,9 +8,7 @@ import sys
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.join(BASE_DIR, '01_toolchain', 'storage'))
-from store import JVGStore
+from .store import JVGStore
 
 class JVGRuntime:
     def __init__(self, storage_dir: str = "jvg_store"):
@@ -21,7 +19,9 @@ class JVGRuntime:
             "ВЫПОЛНЕНИЕ": ["ЗАВЕРШЕНО", "ЗАБЛОКИРОВАНО", "ОТЛОЖЕНО"],
             "ЗАБЛОКИРОВАНО": ["ВЫПОЛНЕНИЕ", "ОТЛОЖЕНО"],
             "ЗАВЕРШЕНО": [],
-            "ОТЛОЖЕНО": ["ИССЛЕДОВАНИЕ", "ПРОЕКТИРОВАНИЕ", "ВЫПОЛНЕНИЕ"]
+            "ОТЛОЖЕНО": ["ИССЛЕДОВАНИЕ", "ПРОЕКТИРОВАНИЕ", "ВЫПОЛНЕНИЕ"],
+            "ОЖИДАНИЕ": ["ИССЛЕДОВАНИЕ", "НЕСТАБИЛЬНО", "ОТЛОЖЕНО"],
+            "НЕСТАБИЛЬНО": ["ВЫПОЛНЕНИЕ", "ЗАВЕРШЕНО"]
         }
 
     def step(self, doc_id: str, new_state: Optional[str] = None, action_result: Optional[str] = None) -> Dict[str, Any]:
@@ -96,38 +96,3 @@ class JVGRuntime:
         if not jvg:
             return "unknown"
         return jvg.get("vectorograph", {}).get("state", {}).get("current", "unknown")
-
-def test_runtime():
-    from store import JVGStore
-    store = JVGStore(storage_dir="test_store")
-    test_jvg = {
-        "vectorograph": {
-            "meta": {"version": "1.0", "title": "Тестовый процесс", "date": "2026-07-07", "author": "Тестер", "status": "черновик"},
-            "entity": {"name": "Процесс", "type": "процесс", "purpose": "тестирование Runtime"},
-            "context": {"origin": "тест", "environment": "локальная среда", "dependencies": []},
-            "structure": {"components": [], "layers": []},
-            "relations": {"inputs": [], "outputs": [], "connected_to": []},
-            "logic": {"rules": [], "algorithms": [], "decision_model": []},
-            "state": {"current": "ИССЛЕДОВАНИЕ", "problems": [], "risks": []},
-            "actions": {"next_steps": ["протестировать", "развернуть"], "required_resources": ["сервер"]},
-            "evolution": {"history": "начало", "future_versions": []}
-        }
-    }
-    doc_id = store.save(test_jvg)
-    print(f"Создан документ: {doc_id}")
-    runtime = JVGRuntime(storage_dir="test_store")
-    print("\n=== Выполняем шаги ===")
-    result = runtime.run(doc_id, [
-        {"new_state": "ПРОЕКТИРОВАНИЕ", "action_result": "начало проектирования"},
-        {"new_state": "ВЫПОЛНЕНИЕ", "action_result": "запуск реализации"},
-        {"new_state": "ЗАВЕРШЕНО", "action_result": "проект завершён"}
-    ])
-    print(f"\nРезультат: {result['status']}")
-    print(f"Финальный документ: {result['final_doc_id']}")
-    history = runtime.get_history(result['final_doc_id'])
-    print("\n=== История ===")
-    for entry in history:
-        print(f"  {entry}")
-
-if __name__ == "__main__":
-    test_runtime()

@@ -1,5 +1,5 @@
 ﻿"""
-ranking.py — Ранжирование JVG (с единым конфигом)
+ranking.py — Ранжирование JVG (исправленный импорт)
 """
 
 import os
@@ -9,9 +9,7 @@ from sentence_transformers import SentenceTransformer
 import chromadb
 from chromadb.config import Settings
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.append(BASE_DIR)
-from config import CHROMA_DB_PATH, MODEL_NAME
+from .config import CHROMA_DB_PATH, MODEL_NAME
 
 class JVGRankingEngine:
     def __init__(self, db_path: str = None):

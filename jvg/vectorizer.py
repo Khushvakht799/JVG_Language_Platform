@@ -1,5 +1,5 @@
 ﻿"""
-vectorizer.py — Векторизатор JVG (с единым конфигом)
+vectorizer.py — Векторизатор JVG (исправленный импорт)
 """
 
 import os
@@ -9,9 +9,7 @@ import chromadb
 from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.append(BASE_DIR)
-from config import CHROMA_DB_PATH, MODEL_NAME
+from .config import CHROMA_DB_PATH, MODEL_NAME
 
 class JVGVectorizer:
     def __init__(self, db_path: str = None):

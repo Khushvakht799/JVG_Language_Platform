@@ -1,4 +1,4 @@
-"""
+﻿"""
 l4_execution.py — Слой исполнения L4
 """
 
@@ -6,9 +6,7 @@ import os
 import sys
 from typing import Dict, Any, List, Optional
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.join(BASE_DIR, '03_runtime'))
-from runtime import JVGRuntime
+from .runtime import JVGRuntime
 
 class L4Execution:
     def __init__(self, storage_dir: str = "jvg_store"):

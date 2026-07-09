@@ -1,40 +1,40 @@
 ﻿"""
-validator.py — Валидатор JVG (объединяет все уровни)
+validator.py — Валидатор JVG
 """
 
 import sys
 import os
 from typing import Dict, Any, List, Tuple
 
-# Добавляем путь к валидаторам
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(BASE_DIR, '01_toolchain', 'validator'))
-
-from structural_validator import JVGValidator as StructuralValidator
-from semantic_validator import SemanticValidator
-from referential_validator import ReferentialValidator
-from behavioral_validator import BehavioralValidator
+from .config import STORAGE_DIR
 
 class JVGValidatorPipeline:
     def __init__(self):
-        self.structural = StructuralValidator()
-        self.semantic = SemanticValidator()
-        self.referential = ReferentialValidator()
-        self.behavioral = BehavioralValidator()
+        self.structural_errors = []
+        self.semantic_errors = []
 
     def validate(self, jvg: Dict[str, Any]) -> Tuple[bool, List[str]]:
-        all_errors = []
+        errors = []
+        data = jvg.get("vectorograph", {})
+        
+        # Проверяем наличие обязательных секций
+        required_sections = ["meta", "entity", "context", "structure", "relations", "logic", "state", "actions", "evolution"]
+        for section in required_sections:
+            if section not in data:
+                errors.append(f"Отсутствует обязательная секция: {section}")
+        
+        # Проверяем entity
+        entity = data.get("entity", {})
+        if not entity.get("name"):
+            errors.append("Отсутствует имя сущности (entity.name)")
+        if not entity.get("type"):
+            errors.append("Отсутствует тип сущности (entity.type)")
+        if entity.get("type") not in ["система", "процесс", "идея", "агент"]:
+            errors.append(f"Недопустимый тип: {entity.get('type')}")
 
-        valid, errors = self.structural.validate(jvg)
-        all_errors.extend(errors)
+        # Проверяем state
+        state = data.get("state", {})
+        if state.get("current") and state.get("current") not in ["ИССЛЕДОВАНИЕ", "ПРОЕКТИРОВАНИЕ", "ВЫПОЛНЕНИЕ", "ЗАБЛОКИРОВАНО", "ЗАВЕРШЕНО", "ОТЛОЖЕНО", "ОЖИДАНИЕ", "НЕСТАБИЛЬНО"]:
+            errors.append(f"Недопустимое состояние: {state.get('current')}")
 
-        valid, errors = self.semantic.validate(jvg)
-        all_errors.extend(errors)
-
-        valid, errors = self.referential.validate(jvg)
-        all_errors.extend(errors)
-
-        valid, errors = self.behavioral.validate(jvg)
-        all_errors.extend(errors)
-
-        return len(all_errors) == 0, all_errors
+        return len(errors) == 0, errors

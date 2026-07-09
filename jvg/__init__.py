@@ -1,22 +1,16 @@
 ﻿"""
-jvg — пакет JVG Language Platform
+jvg — JVG Language Platform
 """
 
-from .compiler import JVGCompiler
-from .validator import JVGValidatorPipeline
-from .store import JVGStore
-from .vectorizer import JVGVectorizer
-from .ranking import JVGRankingEngine
-from .runtime import JVGRuntime
-from .l1_adapter import L1Adapter
-from .l2_memory import L2Memory
-from .l3_models import L3Models
-from .l4_execution import L4Execution
-from .l5_audit import L5Audit
-from .config import JVG_STORE_PATH, CHROMA_DB_PATH
-from .preference import PreferenceProfile, ARCHITECT_PROFILE
-from .metrics import MetricsCollector
-from .feedback_engine import FeedbackEngine
-from .identity import IdentityRegistry, UID, VersionedObject, generate_uid
+from .core.config import Config
+from .storage.store import JVGStore
+from .runtime.runtime import JVGRuntime
+from .execution.action_executor import ActionExecutor
+from .execution.registry import ExecutorRegistry
+from .execution.result import ExecutionResult
+from .execution.logger import ExecutionLogger
+from .execution.bootstrap import register_all
 
-__version__ = "1.0.0"
+register_all()
+
+__version__ = "2.0.0"

@@ -1,4 +1,4 @@
-"""
+﻿"""
 l2_memory.py — Слой памяти L2
 """
 
@@ -6,12 +6,8 @@ import os
 import sys
 from typing import Dict, Any, List, Optional
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.join(BASE_DIR, '01_toolchain', 'storage'))
-sys.path.append(os.path.join(BASE_DIR, '02_search', 'vectorizer'))
-
-from store import JVGStore
-from vectorizer import JVGVectorizer
+from .store import JVGStore
+from .vectorizer import JVGVectorizer
 
 class L2Memory:
     def __init__(self, storage_dir: str = "jvg_store", vector_db_path: str = "jvg_chroma_db"):

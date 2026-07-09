@@ -1,0 +1,36 @@
+digraph JVG {
+  rankdir=LR;
+  node [shape=box, style="rounded,filled", fillcolor=lightblue];
+  label="JVG Platform Graph";
+  fontname="Arial";
+  labelloc=t;
+
+  "doc_0" [label="Сервер\n(система)\nВЫПОЛНЕНИЕ", fillcolor=lightblue];
+  "doc_1" [label="Сервер\n(система)\nВЫПОЛНЕНИЕ", fillcolor=lightblue];
+  "doc_2" [label="Тестовая система\n(система)\nИССЛЕДОВАНИЕ", fillcolor=lightblue];
+  "doc_3" [label="Тест\n(система)\nИССЛЕДОВАНИЕ", fillcolor=lightblue];
+  "doc_4" [label="\n()\n", fillcolor=lightgray];
+  "doc_5" [label="Тестовая система\n(система)\n", fillcolor=lightblue];
+  "doc_6" [label="Тестовая система\n(система)\n", fillcolor=lightblue];
+  "doc_7" [label="Тестовая система\n(система)\n", fillcolor=lightblue];
+  "doc_8" [label="Тестовая система\n(система)\n", fillcolor=lightblue];
+  "doc_9" [label="Тестовая система\n(система)\n", fillcolor=lightblue];
+  "doc_10" [label="Тестовая система\n(система)\n", fillcolor=lightblue];
+  "doc_11" [label="Тестовая система\n(система)\n", fillcolor=lightblue];
+  "doc_12" [label="Тестовая система\n(система)\n", fillcolor=lightblue];
+  "doc_13" [label="Тестовая система\n(система)\n", fillcolor=lightblue];
+  "doc_14" [label="Тестовая система\n(система)\n", fillcolor=lightblue];
+  "doc_15" [label="Тестовая система\n(система)\n", fillcolor=lightblue];
+  "doc_16" [label="Тестовый процесс\n(процесс)\nИССЛЕДОВАНИЕ", fillcolor=lightgreen];
+  "doc_0" -> "база данных" [label="связан"];
+  "doc_0" -> "кэш" [label="связан"];
+  "doc_0" -> "запросы REST" [label="вход"];
+  "ответы JSON" -> "doc_0" [label="выход"];
+  "doc_1" -> "база данных" [label="связан"];
+  "doc_1" -> "кэш" [label="связан"];
+  "doc_1" -> "запросы REST" [label="вход"];
+  "ответы JSON" -> "doc_1" [label="выход"];
+  "doc_2" -> "база данных" [label="связан"];
+  "doc_2" -> "запросы" [label="вход"];
+  "ответы" -> "doc_2" [label="выход"];
+}

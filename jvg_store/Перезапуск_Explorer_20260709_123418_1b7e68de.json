@@ -1,0 +1,113 @@
+{
+  "vectorograph": {
+    "meta": {
+      "version": "3",
+      "title": "\u0410\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u043f\u0435\u0440\u0435\u0437\u0430\u043f\u0443\u0441\u043a \u041f\u0440\u043e\u0432\u043e\u0434\u043d\u0438\u043a\u0430 Windows",
+      "date": "2026-07-08",
+      "author": "JVG",
+      "status": "\u0433\u043e\u0442\u043e\u0432\u043e",
+      "previous_state": "\u041d\u0415\u0421\u0422\u0410\u0411\u0418\u041b\u042c\u041d\u041e",
+      "updated_at": "2026-07-09T12:56:28.074887"
+    },
+    "entity": {
+      "name": "\u041f\u0435\u0440\u0435\u0437\u0430\u043f\u0443\u0441\u043a Explorer",
+      "type": "\u043f\u0440\u043e\u0446\u0435\u0441\u0441",
+      "purpose": "\u0410\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u043e\u0435 \u0432\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435 \u041f\u0440\u043e\u0432\u043e\u0434\u043d\u0438\u043a\u0430 Windows"
+    },
+    "context": {
+      "origin": "\u0414\u0435\u043c\u043e\u043d\u0441\u0442\u0440\u0430\u0446\u0438\u044f Action Executor",
+      "environment": "Windows 11",
+      "dependencies": [
+        "PowerShell",
+        "CMD"
+      ]
+    },
+    "state": {
+      "current": "\u041e\u0416\u0418\u0414\u0410\u041d\u0418\u0415",
+      "problems": [],
+      "risks": [
+        "\u041f\u043e\u0442\u0435\u0440\u044f \u0434\u0430\u043d\u043d\u044b\u0445 \u043f\u0440\u0438 \u043f\u0440\u0438\u043d\u0443\u0434\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u043c \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043d\u0438\u0438"
+      ]
+    },
+    "rules": [
+      {
+        "condition": "state == \u041d\u0415\u0421\u0422\u0410\u0411\u0418\u041b\u042c\u041d\u041e",
+        "action": "run_cmd",
+        "action_params": {
+          "command": "taskkill /f /im explorer.exe && start explorer.exe"
+        }
+      },
+      {
+        "condition": "state == \u041d\u0415\u0421\u0422\u0410\u0411\u0418\u041b\u042c\u041d\u041e",
+        "action": "run_powershell",
+        "action_params": {
+          "command": "Write-Host '\u041f\u0440\u043e\u0432\u043e\u0434\u043d\u0438\u043a \u043f\u0435\u0440\u0435\u0437\u0430\u043f\u0443\u0449\u0435\u043d JVG'"
+        }
+      }
+    ],
+    "triggers": [
+      {
+        "event": "system_unstable",
+        "from": "\u041e\u0416\u0418\u0414\u0410\u041d\u0418\u0415",
+        "to": "\u041d\u0415\u0421\u0422\u0410\u0411\u0418\u041b\u042c\u041d\u041e",
+        "action": "\u0437\u0430\u043f\u0443\u0441\u0442\u0438\u0442\u044c_\u0432\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435"
+      }
+    ],
+    "actions": {
+      "next_steps": [
+        "\u041f\u0435\u0440\u0435\u0432\u0435\u0441\u0442\u0438 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442 \u0432 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435 \u041d\u0415\u0421\u0422\u0410\u0411\u0418\u041b\u042c\u041d\u041e"
+      ],
+      "required_resources": [
+        "\u041f\u0440\u0430\u0432\u0430 \u0430\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0442\u043e\u0440\u0430"
+      ]
+    },
+    "evolution": {
+      "history": "\u0421\u043e\u0437\u0434\u0430\u043d \u043a\u0430\u043a \u0434\u0435\u043c\u043e\u043d\u0441\u0442\u0440\u0430\u0446\u0438\u043e\u043d\u043d\u044b\u0439 \u043f\u0440\u0438\u043c\u0435\u0440\n[2026-07-09T11:50:24.944516] \u041f\u0435\u0440\u0435\u0445\u043e\u0434: \u041e\u0416\u0418\u0414\u0410\u041d\u0418\u0415 \u2192 \u041d\u0415\u0421\u0422\u0410\u0411\u0418\u041b\u042c\u041d\u041e\n[2026-07-09T12:51:05.409466] \u0410\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u043f\u0435\u0440\u0435\u0445\u043e\u0434: \u041d\u0415\u0421\u0422\u0410\u0411\u0418\u041b\u042c\u041d\u041e \u2192 \u0412\u042b\u041f\u041e\u041b\u041d\u0415\u041d\u0418\u0415\n[2026-07-09T12:56:28.074838] \u0410\u0432\u0442\u043e\u043c\u0430\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u043f\u0435\u0440\u0435\u0445\u043e\u0434: \u041e\u0416\u0418\u0414\u0410\u041d\u0418\u0415 \u2192 \u041d\u0415\u0421\u0422\u0410\u0411\u0418\u041b\u042c\u041d\u041e",
+      "future_versions": [
+        "\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443 \u043f\u0435\u0440\u0435\u0437\u0430\u043f\u0443\u0441\u043a\u0430"
+      ]
+    },
+    "state_machine": {
+      "initial": "\u041e\u0416\u0418\u0414\u0410\u041d\u0418\u0415",
+      "states": [
+        "\u041e\u0416\u0418\u0414\u0410\u041d\u0418\u0415",
+        "\u041d\u0415\u0421\u0422\u0410\u0411\u0418\u041b\u042c\u041d\u041e",
+        "\u0412\u042b\u041f\u041e\u041b\u041d\u0415\u041d\u0418\u0415",
+        "\u0417\u0410\u0412\u0415\u0420\u0428\u0415\u041d\u041e"
+      ],
+      "transitions": [
+        {
+          "from": "\u041e\u0416\u0418\u0414\u0410\u041d\u0418\u0415",
+          "to": "\u041d\u0415\u0421\u0422\u0410\u0411\u0418\u041b\u042c\u041d\u041e",
+          "event": "system_unstable"
+        },
+        {
+          "from": "\u041d\u0415\u0421\u0422\u0410\u0411\u0418\u041b\u042c\u041d\u041e",
+          "to": "\u0412\u042b\u041f\u041e\u041b\u041d\u0415\u041d\u0418\u0415",
+          "event": "execution_success"
+        },
+        {
+          "from": "\u0412\u042b\u041f\u041e\u041b\u041d\u0415\u041d\u0418\u0415",
+          "to": "\u0417\u0410\u0412\u0415\u0420\u0428\u0415\u041d\u041e",
+          "event": "process_complete"
+        }
+      ],
+      "rules": [
+        {
+          "condition": "state == \u041d\u0415\u0421\u0422\u0410\u0411\u0418\u041b\u042c\u041d\u041e",
+          "action": "run_cmd",
+          "action_params": {
+            "command": "taskkill /f /im explorer.exe && start /B explorer.exe"
+          }
+        },
+        {
+          "condition": "state == \u0412\u042b\u041f\u041e\u041b\u041d\u0415\u041d\u0418\u0415",
+          "action": "open_url",
+          "action_params": {
+            "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+          }
+        }
+      ]
+    }
+  }
+}
