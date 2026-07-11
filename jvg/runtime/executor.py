@@ -1,19 +1,23 @@
 ﻿"""
-jvg/runtime/executor.py — Исполнитель с правильной последовательностью
+jvg/runtime/executor.py — Исполнитель с событиями (исправленный)
 """
 
 from typing import Dict, Any, Optional
 from datetime import datetime
+import time
 from ..storage.store import JVGStore
 from ..fsm.fsm_engine import FSMEngine
 from ..execution.action_executor import ActionExecutor
+from ..execution.interpreter import SemanticInterpreter
 from ..identity.identity import Identity
+from ..events.event_bus import EventBus
 
 class JVGExecutor:
-    def __init__(self, storage_dir: Optional[str] = None, debug: bool = False):
+    def __init__(self, storage_dir: Optional[str] = None, debug: bool = False, loop: bool = False):
         self.store = JVGStore(storage_dir=storage_dir)
-        self.executor = ActionExecutor()
         self.debug = debug
+        self.loop = loop
+        self.running = True
 
     def _log(self, step: int, message: str, data: Any = None):
         if self.debug:
@@ -21,97 +25,122 @@ class JVGExecutor:
             if data is not None:
                 print(f"     {data}")
 
-    def execute(self, doc_id: str) -> Dict[str, Any]:
-        self._log(1, "Загрузка документа", doc_id)
+    def _execute_once(self, doc_id: str) -> Dict[str, Any]:
         jvg = self.store.get(doc_id)
         if not jvg:
             return {"status": "error", "error": f"Документ {doc_id} не найден"}
 
-        self._log(2, "Документ загружен", jvg.get("vectorograph", {}).get("meta", {}).get("title", "без названия"))
-
-        fsm = FSMEngine(jvg)
+        fsm = FSMEngine(jvg, debug=self.debug)
         data = jvg.get("vectorograph", {})
         state = data.get("state", {})
         current_state = state.get("current", fsm.get_initial_state())
 
         self._log(3, "Текущее состояние", current_state)
-        available = fsm.get_available_transitions(current_state)
-        self._log(4, "Доступные переходы", available)
-        self._log(5, "Все состояния", fsm.states)
+        transitions = fsm.get_available_transitions(current_state)
+        self._log(4, "Доступные переходы", transitions)
 
-        if not available:
-            return {
-                "status": "idle",
-                "doc_id": doc_id,
-                "state": current_state,
-                "message": "Нет доступных переходов",
-                "available": available,
-                "states": fsm.states
-            }
+        if not transitions:
+            return {"status": "idle", "doc_id": doc_id, "state": current_state, "message": "Нет доступных переходов"}
 
-        next_state = available[0]
-        self._log(6, "Выбран следующий переход", next_state)
+        # Выполняем правила для текущего состояния
+        rules = fsm.get_rules()
+        action_result = None
+        facts = None
 
-        # 1. Сначала обновляем состояние
+        for rule in rules:
+            condition = rule.get("condition", "")
+            if condition.startswith("state == "):
+                expected_state = condition.split("state == ")[1].strip().strip('"')
+                if expected_state == current_state:
+                    action = rule.get("action")
+                    params = rule.get("action_params", {})
+                    self._log(11, f"Применяем правило: {condition} → {action}", params)
+                    action_result = ActionExecutor.execute(action, params)
+                    self._log(12, "Результат выполнения", action_result.to_dict() if action_result else None)
+
+                    facts = SemanticInterpreter.interpret(action_result) if action_result else {}
+                    self._log(13, "Интерпретированные факты", facts)
+                    break
+
+        # Выбираем переход на основе фактов
+        transition = fsm.get_transition_by_facts(current_state, facts or {})
+        if not transition:
+            return {"status": "idle", "doc_id": doc_id, "state": current_state, "message": "Нет подходящего перехода"}
+
+        next_state = transition.get("to")
+        condition_used = transition.get("condition", "нет условия")
+        self._log(14, f"Выбран переход по условию", f"{current_state} → {next_state} (условие: {condition_used})")
+
+        # Публикуем событие о переходе
+        event_data = {
+            "doc_id": doc_id,
+            "from_state": current_state,
+            "to_state": next_state,
+            "condition": condition_used,
+            "facts": facts,
+            "action_result": action_result.to_dict() if action_result else None
+        }
+        EventBus.publish(f"transition.{current_state}_{next_state}", event_data)
+
+        # Обновляем состояние
         state["current"] = next_state
-        history_entry = f"[{datetime.now().isoformat()}] Переход: {current_state} → {next_state}"
         evolution = data.get("evolution", {})
+        history_entry = f"[{datetime.now().isoformat()}] Переход: {current_state} → {next_state} (условие: {condition_used})"
         evolution["history"] = evolution.get("history", "") + "\n" + history_entry
 
         jvg["vectorograph"]["state"] = state
         jvg["vectorograph"]["evolution"] = evolution
         jvg = Identity.version(jvg, next_state)
 
-        self._log(7, "Состояние обновлено", f"{current_state} → {next_state}")
+        if action_result:
+            history_entry = f"[{datetime.now().isoformat()}] Результат: {action_result.to_dict()}"
+            jvg["vectorograph"]["evolution"]["history"] = jvg["vectorograph"]["evolution"].get("history", "") + "\n" + history_entry
 
-        # 2. Применяем правила ДЛЯ НОВОГО состояния
-        rules = fsm.get_rules()
-        self._log(8, f"Правил: {len(rules)}", rules)
+        if facts:
+            history_entry = f"[{datetime.now().isoformat()}] Факты: {facts}"
+            jvg["vectorograph"]["evolution"]["history"] = jvg["vectorograph"]["evolution"].get("history", "") + "\n" + history_entry
 
-        action_executed = False
-        for rule in rules:
-            condition = rule.get("condition", "")
-            self._log(9, "Проверка условия", condition)
-            if "state == " in condition:
-                expected_state = condition.split("state == ")[1].strip().strip('"')
-                self._log(10, "Ожидаемое состояние", expected_state)
-                if state.get("current") == expected_state:
-                    action = rule.get("action")
-                    params = rule.get("action_params", {})
-                    self._log(11, f"Применяем правило: {condition} → {action}", params)
-                    exec_result = self.executor.execute(action, params)
-                    self._log(12, "Результат выполнения", exec_result)
-                    if exec_result.get("status") == "ok":
-                        # Добавляем в историю
-                        evolution = jvg["vectorograph"].get("evolution", {})
-                        history_entry = f"[{datetime.now().isoformat()}] Выполнено действие: {action}"
-                        evolution["history"] = evolution.get("history", "") + "\n" + history_entry
-                        jvg["vectorograph"]["evolution"] = evolution
-                        self.store.update(doc_id, jvg)
-                        action_executed = True
-                    break
-
-        if not action_executed:
-            self._log(13, "Действие не выполнено (нет подходящих правил для нового состояния)")
-
-        # 3. Сохраняем финальную версию
         self.store.update(doc_id, jvg)
-        self._log(14, "Документ сохранён", next_state)
+        self._log(17, "Документ сохранён", next_state)
 
         return {
             "status": "ok",
             "doc_id": doc_id,
             "old_state": current_state,
             "new_state": next_state,
-            "updated_doc_id": doc_id,
-            "version": jvg["vectorograph"]["meta"].get("version", "0"),
+            "condition_used": condition_used,
             "available": fsm.get_available_transitions(next_state),
-            "action_executed": action_executed
+            "action_result": action_result.to_dict() if action_result else None,
+            "facts": facts
         }
 
-    def get_state(self, doc_id: str) -> str:
-        jvg = self.store.get(doc_id)
-        if not jvg:
-            return "unknown"
-        fsm = FSMEngine(jvg)
-        return jvg.get("vectorograph", {}).get("state", {}).get("current", fsm.get_initial_state())
+    def _execute_loop(self, doc_id: str):
+        print("🔄 Запуск живого мониторинга...")
+        iteration = 0
+        while self.running:
+            iteration += 1
+            print(f"\n--- Итерация {iteration} ---")
+            result = self._execute_once(doc_id)
+
+            if result.get("status") == "idle":
+                print(f"ℹ️ Документ в состоянии {result.get('state')}, нет доступных переходов. Ждём...")
+                time.sleep(5)
+                continue
+
+            if result.get("status") == "error":
+                print(f"❌ Ошибка: {result.get('error')}")
+                break
+
+            old_state = result.get("old_state", "?")
+            new_state = result.get("new_state", "?")
+            print(f"✅ Переход: {old_state} → {new_state}")
+            print(f"   Условие: {result.get('condition_used', 'нет')}")
+            print(f"   Следующие действия: {result.get('available', [])}")
+
+            time.sleep(2)
+
+    def execute(self, doc_id: str) -> Dict[str, Any]:
+        if self.loop:
+            self._execute_loop(doc_id)
+            return {"status": "ok", "doc_id": doc_id, "message": "Цикл остановлен"}
+        return self._execute_once(doc_id)

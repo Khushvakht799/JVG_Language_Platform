@@ -1,5 +1,5 @@
 ﻿"""
-jvg/cli/tools.py — CLI с универсальным поиском (исправленный)
+jvg/cli/tools.py — CLI с режимом цикла
 """
 
 import sys
@@ -18,36 +18,30 @@ def list_docs():
         print(f"  {i}. {item.get('title', 'без названия')} ({item.get('type', 'unknown')}) — {logical}")
 
 def resolve_doc_id(store: JVGStore, query: str) -> Optional[str]:
-    """Находит документ по запросу."""
     results = store.find(query)
     if not results:
         return None
     if len(results) == 1:
         return results[0].get("id")
-    # Если несколько — показываем варианты
     print(f"🔍 Найдено {len(results)} документов по запросу '{query}':")
     for i, item in enumerate(results, 1):
         print(f"  {i}. {item.get('title', 'без названия')} ({item.get('logical_name', 'unknown')})")
     return None
 
-def run_doc(query: str, debug: bool = False):
+def run_doc(query: str, debug: bool = False, loop: bool = False):
     store = JVGStore()
     doc_id = resolve_doc_id(store, query)
     if not doc_id:
         print(f"❌ Документ не найден: {query}")
         return
-    
-    executor = JVGExecutor(debug=debug)
+
+    executor = JVGExecutor(debug=debug, loop=loop)
     result = executor.execute(doc_id)
-    if result["status"] == "ok":
-        available = result.get('available', [])
+    if result.get("status") == "ok":
         print(f"✅ Автоматический переход: {result['old_state']} → {result['new_state']}")
-        print(f"   Доступно: {available}")
-    elif result["status"] == "idle":
-        states = result.get('states', [])
+        print(f"   Доступно: {result.get('available', [])}")
+    elif result.get("status") == "idle":
         print(f"ℹ️ Документ в состоянии {result['state']}, нет доступных переходов")
-        if debug:
-            print(f"   Все состояния: {states}")
     else:
         print(f"❌ Ошибка: {result.get('error')}")
 
@@ -58,17 +52,10 @@ JVG CLI v2.0
 
 Использование:
     python -m jvg.cli.tools list
-    python -m jvg.cli.tools run <query> [--debug]
-    
-Поиск работает по:
-    - полному ID
-    - логическому имени
-    - части названия
-    - части ID
+    python -m jvg.cli.tools run <query> [--debug] [--loop]
     
 Примеры:
-    python -m jvg.cli.tools run Перезапуск
-    python -m jvg.cli.tools run Explorer
+    python -m jvg.cli.tools run Монитор --loop
 """)
         return
 
@@ -77,7 +64,8 @@ JVG CLI v2.0
         list_docs()
     elif cmd == "run" and len(sys.argv) > 2:
         debug = "--debug" in sys.argv
-        run_doc(sys.argv[2], debug)
+        loop = "--loop" in sys.argv
+        run_doc(sys.argv[2], debug, loop)
     else:
         print(f"❌ Неизвестная команда: {cmd}")
 
