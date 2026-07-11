@@ -18,6 +18,7 @@ from .planning.router import Router
 from .security.security_engine import SecurityEngine, RiskLevel
 from .security.simulation_engine import SimulationEngine
 from .security.security_engine_v2 import SecurityEngineV2
+from .agents.agent_runner import AgentRunner
 
 register_all()
 

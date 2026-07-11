@@ -1,0 +1,47 @@
+{
+  "vectorograph": {
+    "meta": {
+      "title": "\u041c\u043e\u043d\u0438\u0442\u043e\u0440\u0438\u043d\u0433 \u0441\u0435\u0440\u0432\u0435\u0440\u0430",
+      "version": "1",
+      "previous_state": "\u041d\u0415_\u0420\u0410\u0411\u041e\u0422\u0410\u0415\u0422",
+      "updated_at": "2026-07-10T16:25:10.839901"
+    },
+    "entity": {
+      "name": "\u041c\u043e\u043d\u0438\u0442\u043e\u0440",
+      "type": "\u043f\u0440\u043e\u0446\u0435\u0441\u0441"
+    },
+    "state": {
+      "current": "\u041d\u0415_\u0420\u0410\u0411\u041e\u0422\u0410\u0415\u0422"
+    },
+    "state_machine": {
+      "initial": "\u041f\u0420\u041e\u0412\u0415\u0420\u041a\u0410",
+      "states": [
+        "\u041f\u0420\u041e\u0412\u0415\u0420\u041a\u0410",
+        "\u0420\u0410\u0411\u041e\u0422\u0410\u0415\u0422",
+        "\u041d\u0415_\u0420\u0410\u0411\u041e\u0422\u0410\u0415\u0422"
+      ],
+      "transitions": [
+        {
+          "from": "\u041f\u0420\u041e\u0412\u0415\u0420\u041a\u0410",
+          "to": "\u0420\u0410\u0411\u041e\u0422\u0410\u0415\u0422"
+        },
+        {
+          "from": "\u041f\u0420\u041e\u0412\u0415\u0420\u041a\u0410",
+          "to": "\u041d\u0415_\u0420\u0410\u0411\u041e\u0422\u0410\u0415\u0422"
+        }
+      ],
+      "rules": [
+        {
+          "condition": "state == \u041f\u0420\u041e\u0412\u0415\u0420\u041a\u0410",
+          "action": "http_request",
+          "action_params": {
+            "url": "https://httpbin.org/get"
+          }
+        }
+      ]
+    },
+    "evolution": {
+      "history": "\n[2026-07-10T16:25:10.839880] \u041f\u0435\u0440\u0435\u0445\u043e\u0434: \u041f\u0420\u041e\u0412\u0415\u0420\u041a\u0410 \u2192 \u041d\u0415_\u0420\u0410\u0411\u041e\u0422\u0410\u0415\u0422\n[2026-07-10T16:25:10.839904] \u0420\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442: {'success': False, 'action': 'http_request', 'exit_code': 503, 'stdout': '<html>\\r\\n<head><title>503 Service Temporarily Unavailable</title></head>\\r\\n<body>\\r\\n<center><h1>503 Service Temporarily Unavailable</h1></center>\\r\\n</body>\\r\\n</html>\\r\\n', 'stderr': None, 'duration': 0.7478165626525879, 'timestamp': '2026-07-10T16:25:10.837917', 'error': None}"
+    }
+  }
+}

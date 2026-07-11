@@ -1,10 +1,11 @@
 ﻿"""
-jvg/execution/executors/git.py — Git исполнитель с саморегистрацией
+jvg/execution/executors/git.py — Git исполнитель (улучшенный)
 """
 
 import subprocess
 import os
 import time
+import shlex
 from typing import Dict, Any
 from .base import BaseExecutor
 from ..result import ExecutionResult
@@ -29,24 +30,31 @@ class GitExecutor(BaseExecutor):
             if repo_path != ".":
                 os.chdir(repo_path)
             
-            full_command = f"git {command}"
-            print(f"   ⚡ Выполнение Git: {full_command}")
+            # Безопасный запуск без shell=True
+            args = ["git"] + shlex.split(command)
+            print(f"   ⚡ Выполнение Git: {' '.join(args)}")
             
             start = time.time()
             process = subprocess.run(
-                full_command,
-                shell=True,
+                args,
                 capture_output=True,
                 text=True,
                 timeout=timeout
             )
             duration = time.time() - start
             
+            # Объединяем вывод для удобства
+            output = process.stdout
+            if process.stderr:
+                output += "\n" + process.stderr
+            
+            success = process.returncode == 0
+            
             return ExecutionResult(
-                success=process.returncode == 0,
+                success=success,
                 action=self.name,
                 exit_code=process.returncode,
-                stdout=process.stdout,
+                stdout=output.strip(),
                 stderr=process.stderr,
                 duration=duration
             )

@@ -1,0 +1,48 @@
+{
+  "vectorograph": {
+    "meta": {
+      "title": "\u041c\u043e\u0439\u041f\u0440\u043e\u0446\u0435\u0441\u0441",
+      "version": "2",
+      "previous_state": "\u0412\u042b\u041f\u041e\u041b\u041d\u0415\u041d\u041e",
+      "updated_at": "2026-07-09T21:24:54.645637"
+    },
+    "entity": {
+      "name": "\u041c\u043e\u0439\u041f\u0440\u043e\u0446\u0435\u0441\u0441",
+      "type": "\u043f\u0440\u043e\u0446\u0435\u0441\u0441",
+      "purpose": "\u0414\u0435\u043c\u043e\u043d\u0441\u0442\u0440\u0430\u0446\u0438\u044f"
+    },
+    "state": {
+      "current": "\u041e\u0416\u0418\u0414\u0410\u041d\u0418\u0415"
+    },
+    "state_machine": {
+      "initial": "\u041e\u0416\u0418\u0414\u0410\u041d\u0418\u0415",
+      "states": [
+        "\u041e\u0416\u0418\u0414\u0410\u041d\u0418\u0415",
+        "\u0413\u041e\u0422\u041e\u0412",
+        "\u0412\u042b\u041f\u041e\u041b\u041d\u0415\u041d\u041e"
+      ],
+      "transitions": [
+        {
+          "from": "\u041e\u0416\u0418\u0414\u0410\u041d\u0418\u0415",
+          "to": "\u0413\u041e\u0422\u041e\u0412"
+        },
+        {
+          "from": "\u0413\u041e\u0422\u041e\u0412",
+          "to": "\u0412\u042b\u041f\u041e\u041b\u041d\u0415\u041d\u041e"
+        }
+      ],
+      "rules": [
+        {
+          "condition": "state == \u0413\u041e\u0422\u041e\u0412",
+          "action": "open_url",
+          "action_params": {
+            "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+          }
+        }
+      ]
+    },
+    "evolution": {
+      "history": "\n[2026-07-09T21:23:13.528347] \u041f\u0435\u0440\u0435\u0445\u043e\u0434: \u041e\u0416\u0418\u0414\u0410\u041d\u0418\u0415 \u2192 \u0413\u041e\u0422\u041e\u0412\n[2026-07-09T21:24:54.645614] \u041f\u0435\u0440\u0435\u0445\u043e\u0434: \u0413\u041e\u0422\u041e\u0412 \u2192 \u0412\u042b\u041f\u041e\u041b\u041d\u0415\u041d\u041e"
+    }
+  }
+}
