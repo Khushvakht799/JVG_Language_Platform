@@ -1,0 +1,25 @@
+{
+  "vectorograph": {
+    "meta": {
+      "title": "Execution Log",
+      "type": "log",
+      "version": "1.0"
+    },
+    "entries": [
+      {
+        "timestamp": "2026-07-11T14:32:20.603473",
+        "doc_id": "GitAgent_20260711_114248_5bed76d1",
+        "action": "run_git",
+        "params": {
+          "command": "status"
+        },
+        "success": true,
+        "exit_code": 0,
+        "stdout": "On branch v2-architecture\nYour branch is up to date with 'origin/v2-architecture'.\n\nChanges to be committed:\n  (use \"git restore --staged <file>...\" to unstage)\n\tnew file:   __pycache__/run_planner_agent.cpython-313.pyc\n\tmodified:   jvg/__init__.py\n\tmodified:   jvg/__pycache__/__init__.cpython-313.pyc\n\tmodified:   jvg/agents/__pycache__/agent_runner.cpython-313.pyc\n\tmodified:   jvg/agents/agent_runner.py\n\tmodified:   jvg/cli/__pycache__/tools.cpython-313.pyc\n\tmodified:   jvg/cli/tools.py\n\tmodified:   jvg/execution/__pycache__/action_executor.cpython-313.pyc\n\tnew file:   jvg/execution/__pycache__/git_interpreter.cpython-313.pyc\n\tmodified:   jvg/execution/__pycache__/interpreter.cpython-313.pyc\n\tmodified:   jvg/execution/action_executor.py\n\tnew file:   jvg/execution/git_interpreter.py\n\tmodified:   jvg/execution/interpreter.py\n\tnew file:   jvg/knowledge/__init__.py\n\tnew file:   jvg/knowledge/__pycache__/__init__.cpython-313.pyc\n\tnew file:   jvg/knowledge/__pycache__/world_model.cpython-313.pyc\n\tnew file:   jvg/knowledge/world_model.py\n\tmodified:   jvg/planning/__init__.py\n\tmodified:   jvg/planning/__pycache__/__init__.cpython-313.pyc\n\tnew file:   jvg/planning/__pycache__/planner.cpython-313.pyc\n\tnew file:   jvg/planning/__pycache__/planner_v2.cpython-313.pyc\n\tnew file:   jvg/planning/planner.py\n\tnew file:   jvg/planning/planner_v2.py\n\tmodified:   jvg_store/GitAgent_20260711_114248_5bed76d1.json\n\tmodified:   jvg_store/index.json\n\tnew file:   jvg_store/unknown_20260711_124509_83986491.json\n\tnew file:   jvg_store/unknown_20260711_124747_636c858a.json\n\tnew file:   run_planner_agent.py\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   jvg/__init__.py\n\tmodified:   jvg/__pycache__/__init__.cpython-313.pyc\n\tmodified:   jvg/planning/__init__.py\n\tmodified:   jvg/planning/__pycache__/__init__.cpython-313.pyc\n\tmodified:   jvg_store/index.json\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\t__pycache__/run_planner_v3.cpython-313.pyc\n\tjvg/planning/__pycache__/planner_v3.cpython-313.pyc\n\tjvg/planning/planner_v3.py\n\tjvg_store/unknown_20260711_142635_a0983823.json\n\trun_planner_v3.py",
+        "stderr": "",
+        "duration": 0.03574776649475098,
+        "error": null
+      }
+    ]
+  }
+}

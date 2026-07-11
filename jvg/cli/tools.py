@@ -1,11 +1,11 @@
 ﻿"""
-jvg/cli/tools.py — CLI с режимом цикла
+jvg/cli/tools.py — CLI с AgentRunner вместо старого исполнителя
 """
 
 import sys
 from typing import Optional
 from ..storage.store import JVGStore
-from ..runtime.executor import JVGExecutor
+from ..agents.agent_runner import AgentRunner
 
 def list_docs():
     store = JVGStore()
@@ -28,22 +28,24 @@ def resolve_doc_id(store: JVGStore, query: str) -> Optional[str]:
         print(f"  {i}. {item.get('title', 'без названия')} ({item.get('logical_name', 'unknown')})")
     return None
 
-def run_doc(query: str, debug: bool = False, loop: bool = False):
+def run_doc(query: str, debug: bool = False):
     store = JVGStore()
     doc_id = resolve_doc_id(store, query)
     if not doc_id:
         print(f"❌ Документ не найден: {query}")
         return
 
-    executor = JVGExecutor(debug=debug, loop=loop)
-    result = executor.execute(doc_id)
+    # Используем AgentRunner вместо старого исполнителя
+    runner = AgentRunner(debug=debug, loop=False)
+    result = runner.run(doc_id)
+    
     if result.get("status") == "ok":
-        print(f"✅ Автоматический переход: {result['old_state']} → {result['new_state']}")
-        print(f"   Доступно: {result.get('available', [])}")
-    elif result.get("status") == "idle":
-        print(f"ℹ️ Документ в состоянии {result['state']}, нет доступных переходов")
+        print(f"✅ Агент завершил работу")
+        print(f"   Состояние: {result.get('final_state', 'unknown')}")
+        print(f"   Итераций: {result.get('iterations', 0)}")
+        print(f"   ID: {result.get('doc_id', 'unknown')}")
     else:
-        print(f"❌ Ошибка: {result.get('error')}")
+        print(f"❌ Ошибка: {result.get('error', 'неизвестная ошибка')}")
 
 def main():
     if len(sys.argv) < 2:
@@ -52,10 +54,11 @@ JVG CLI v2.0
 
 Использование:
     python -m jvg.cli.tools list
-    python -m jvg.cli.tools run <query> [--debug] [--loop]
+    python -m jvg.cli.tools run <query> [--debug]
     
 Примеры:
-    python -m jvg.cli.tools run Монитор --loop
+    python -m jvg.cli.tools run Перезапуск
+    python -m jvg.cli.tools run Explorer --debug
 """)
         return
 
@@ -64,8 +67,7 @@ JVG CLI v2.0
         list_docs()
     elif cmd == "run" and len(sys.argv) > 2:
         debug = "--debug" in sys.argv
-        loop = "--loop" in sys.argv
-        run_doc(sys.argv[2], debug, loop)
+        run_doc(sys.argv[2], debug)
     else:
         print(f"❌ Неизвестная команда: {cmd}")
 

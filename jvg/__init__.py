@@ -15,10 +15,15 @@ from .events.event_bus import EventBus
 from .planning.goal_engine import GoalEngine
 from .planning.goal_planner import GoalPlanner
 from .planning.router import Router
+from .planning.planner import Planner
+from .planning.planner_v2 import PlannerV2
+from .planning.planner_v3 import PlannerV3
+from .planning.planner_v4 import PlannerV4
 from .security.security_engine import SecurityEngine, RiskLevel
 from .security.simulation_engine import SimulationEngine
 from .security.security_engine_v2 import SecurityEngineV2
 from .agents.agent_runner import AgentRunner
+from .knowledge.world_model import WorldModel
 
 register_all()
 

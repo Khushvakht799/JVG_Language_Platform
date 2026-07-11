@@ -1,17 +1,14 @@
 ﻿"""
-jvg/execution/interpreter.py — Semantic Interpreter
-Превращает ExecutionResult в факты для FSM.
+jvg/execution/interpreter.py — Универсальный интерпретатор (с актуальным состоянием Git)
 """
 
 from typing import Dict, Any
 from .result import ExecutionResult
+from .git_interpreter import GitInterpreter
 
 class SemanticInterpreter:
     @staticmethod
-    def interpret(result: ExecutionResult) -> Dict[str, Any]:
-        """
-        Превращает результат выполнения в структурированные факты.
-        """
+    def interpret(result: ExecutionResult, repo_path: str = ".") -> Dict[str, Any]:
         facts = {
             "success": result.success,
             "action": result.action,
@@ -20,7 +17,7 @@ class SemanticInterpreter:
             "error": result.error
         }
 
-        # HTTP
+        # HTTP интерпретация
         if result.action == "http_request" and result.exit_code is not None:
             facts["http"] = {
                 "status_code": result.exit_code,
@@ -32,7 +29,15 @@ class SemanticInterpreter:
                 "redirect": result.exit_code in [301, 302, 307, 308]
             }
 
-        # CMD / PowerShell
+        # Git интерпретация — всегда используем актуальное состояние
+        if result.action == "run_git":
+            # Получаем актуальное состояние репозитория
+            git_facts = GitInterpreter.get_current_status(repo_path)
+            facts.update(git_facts)
+            # Добавляем информацию о выполненной команде
+            facts["git_command"] = result.stdout[:100] if result.stdout else ""
+
+        # CMD / PowerShell интерпретация
         if result.action in ["run_cmd", "run_powershell"]:
             facts["execution"] = {
                 "exit_code": result.exit_code,
@@ -41,7 +46,7 @@ class SemanticInterpreter:
                 "error": result.stderr
             }
 
-        # URL
+        # URL интерпретация
         if result.action == "open_url":
             facts["browser"] = {
                 "opened": result.success,

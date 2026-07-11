@@ -1,5 +1,5 @@
 ﻿"""
-jvg/agents/agent_runner.py — Универсальный исполнитель агентов (исправленное хранение)
+jvg/agents/agent_runner.py — Универсальный исполнитель агентов (с repo_path)
 """
 
 import time
@@ -7,7 +7,6 @@ from typing import Dict, Any, Optional
 from ..storage.store import JVGStore
 from ..fsm.fsm_engine import FSMEngine
 from ..execution.action_executor import ActionExecutor
-from ..execution.interpreter import SemanticInterpreter
 from ..identity.identity import Identity
 from ..events.event_bus import EventBus
 
@@ -39,10 +38,15 @@ class AgentRunner:
                     action = rule.get("action")
                     params = rule.get("action_params", {})
                     self._log(11, f"Применяем правило: {condition} → {action}", params)
-                    action_result = ActionExecutor.execute(action, params)
+                    
+                    result_dict = ActionExecutor.execute(action, params)
+                    action_result = result_dict.get("execution_result")
+                    
+                    # Используем SemanticInterpreter с repo_path
+                    from ..execution.interpreter import SemanticInterpreter
+                    facts = SemanticInterpreter.interpret(action_result, repo_path=".")
+                    
                     self._log(12, "Результат выполнения", action_result.to_dict() if action_result else None)
-
-                    facts = SemanticInterpreter.interpret(action_result) if action_result else {}
                     self._log(13, "Интерпретированные факты", facts)
 
                     transitions = fsm.get_available_transitions(current_state)
@@ -111,15 +115,15 @@ class AgentRunner:
             jvg["vectorograph"]["evolution"] = evolution
             jvg = Identity.version(jvg, next_state)
 
+            if facts:
+                jvg["vectorograph"]["last_fact"] = facts
+                history_entry = f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Факты: {facts}"
+                jvg["vectorograph"]["evolution"]["history"] = jvg["vectorograph"]["evolution"].get("history", "") + "\n" + history_entry
+
             if action_result:
                 history_entry = f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Результат: {action_result.to_dict()}"
                 jvg["vectorograph"]["evolution"]["history"] = jvg["vectorograph"]["evolution"].get("history", "") + "\n" + history_entry
 
-            if facts:
-                history_entry = f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Факты: {facts}"
-                jvg["vectorograph"]["evolution"]["history"] = jvg["vectorograph"]["evolution"].get("history", "") + "\n" + history_entry
-
-            # Сохраняем обновлённый документ (обновляем текущий, не создаём новый)
             ok = self.store.update(current_doc_id, jvg)
             if not ok:
                 return {"status": "error", "error": f"Не удалось обновить документ {current_doc_id}"}

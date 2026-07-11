@@ -1,5 +1,5 @@
 ﻿"""
-jvg/execution/action_executor.py — Универсальный диспетчер (без политик)
+jvg/execution/action_executor.py — Диспетчер с SemanticInterpreter
 """
 
 from typing import Dict, Any, Optional
@@ -7,6 +7,7 @@ from .registry import ExecutorRegistry
 from .result import ExecutionResult
 from .logger import ExecutionLogger
 from .action_card import ActionCard
+from .interpreter import SemanticInterpreter
 from ..security.security_engine_v2 import SecurityEngineV2
 from ..security.simulation_engine import SimulationEngine
 
@@ -15,12 +16,12 @@ _simulator = SimulationEngine()
 
 class ActionExecutor:
     @staticmethod
-    def execute(action: str, params: Dict[str, Any], doc_id: Optional[str] = None, dry_run: bool = False) -> ExecutionResult:
+    def execute(action: str, params: Dict[str, Any], doc_id: Optional[str] = None, dry_run: bool = False) -> Dict[str, Any]:
         command = params.get("command", "")
-        
+
         # Проверка через SecurityEngineV2
         check = _security.check(action, params)
-        
+
         # Создаём карточку решения
         card = ActionCard(
             action=action,
@@ -42,30 +43,38 @@ class ActionExecutor:
         card.print_card()
 
         if check["final_decision"] != "ALLOWED":
-            return ExecutionResult(
+            result = ExecutionResult(
                 success=False,
                 action=action,
                 error=f"Безопасность: {check['message']}",
                 exit_code=403
             )
+            return {"execution_result": result, "facts": SemanticInterpreter.interpret(result)}
 
         if dry_run:
-            return ExecutionResult(
+            result = ExecutionResult(
                 success=True,
                 action=action,
                 stdout="DRY RUN: действие симулировано",
                 data=card.to_dict()
             )
+            return {"execution_result": result, "facts": SemanticInterpreter.interpret(result)}
 
         executor = ExecutorRegistry.get(action)
         if not executor:
-            return ExecutionResult(
+            result = ExecutionResult(
                 success=False,
                 action=action,
                 error=f"Неизвестный исполнитель: {action}"
             )
+            return {"execution_result": result, "facts": SemanticInterpreter.interpret(result)}
 
         result = executor.execute(params)
+        
+        # Интерпретируем результат
+        facts = SemanticInterpreter.interpret(result)
+        
         if doc_id:
             ExecutionLogger.log(doc_id, action, result, params)
-        return result
+        
+        return {"execution_result": result, "facts": facts}
