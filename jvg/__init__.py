@@ -19,6 +19,7 @@ from .planning.planner import Planner
 from .planning.planner_v2 import PlannerV2
 from .planning.planner_v3 import PlannerV3
 from .planning.planner_v4 import PlannerV4
+from .planning.planner_v5 import PlannerV5
 from .security.security_engine import SecurityEngine, RiskLevel
 from .security.simulation_engine import SimulationEngine
 from .security.security_engine_v2 import SecurityEngineV2
