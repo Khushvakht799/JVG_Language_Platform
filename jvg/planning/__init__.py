@@ -6,3 +6,6 @@ from .planner_v2 import PlannerV2
 from .planner_v3 import PlannerV3
 from .planner_v4 import PlannerV4
 from .planner_v5 import PlannerV5
+from .planner_v6 import PlannerV6
+from .planner_v7 import PlannerV7
+from .planner_v8 import PlannerV8
