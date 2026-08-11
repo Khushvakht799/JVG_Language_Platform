@@ -1,0 +1,12 @@
+﻿services:
+  jvg-platform:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./jvg_store:/app/jvg_store
+    environment:
+      - PYTHONPATH=/app
+    restart: unless-stopped
