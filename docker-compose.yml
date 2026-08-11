@@ -1,0 +1,11 @@
+﻿version: '3.9'
+
+services:
+  jvg:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./jvg_store:/app/jvg_store
+    environment:
+      - DEBUG=True

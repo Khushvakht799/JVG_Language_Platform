@@ -1,0 +1,10 @@
+{
+  "scenario": "handover",
+  "steps": [
+    { "id": "step_1", "action": "engineer_a_completes_shift", "params": { "notes": "all servers running" } },
+    { "id": "step_2", "action": "record_equipment_status", "params": { "servers": ["rack1", "rack2"], "status": "operational" } },
+    { "id": "step_3", "action": "record_open_incidents", "params": { "incidents": [] } },
+    { "id": "step_4", "action": "engineer_b_confirms_handover", "params": { "confirmation": true } },
+    { "id": "step_5", "action": "finalize_handover", "params": { "status": "HANDOVER_COMPLETE" } }
+  ]
+}
