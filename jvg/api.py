@@ -1,4 +1,4 @@
-"""
+﻿"""
 jvg/api.py — REST API для JVG Runtime
 """
 
