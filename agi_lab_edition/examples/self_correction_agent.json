@@ -1,0 +1,19 @@
+﻿{
+  "name": "SelfCorrectingAgent",
+  "version": "1.0",
+  "description": "Агент с механизмами самоисправления для AGI Lab",
+  "modules": [
+    {"name": "Reflection", "enabled": true, "parameters": {"history_length": 10, "correction_threshold": 0.3}},
+    {"name": "SelfEvaluation", "enabled": true, "parameters": {"success_threshold": 0.7}},
+    {"name": "CoTVerification", "enabled": true, "parameters": {"max_chain_length": 5}}
+  ],
+  "model": {
+    "type": "llm",
+    "provider": "amazon-bedrock",
+    "model_id": "anthropic.claude-3-sonnet",
+    "parameters": {"temperature": 0.3, "max_tokens": 2048}
+  },
+  "tools": [],
+  "memory": {"type": "vector", "provider": "amazon-opensearch", "config": {}},
+  "verification": {"enabled": true, "rules": ["no_unsafe_actions", "no_cycles", "consistency_check"]}
+}

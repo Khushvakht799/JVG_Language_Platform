@@ -84,3 +84,7 @@
 
 
 
+
+## 📸 Демонстрация
+
+![Демо-вывод SLC для AGI Lab](docs/demo_output.png)

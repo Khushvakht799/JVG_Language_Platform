@@ -1,0 +1,21 @@
+﻿{
+  "name": "ToolComposer",
+  "version": "1.0",
+  "description": "Модуль композиции инструментов для AGI Lab",
+  "tools": [
+    {
+      "name": "calculator",
+      "description": "Выполняет математические операции",
+      "keywords": ["calculate", "math", "sum", "multiply"],
+      "input_schema": {"type": "object", "properties": {"expression": {"type": "string"}}},
+      "output_schema": {"type": "object", "properties": {"result": {"type": "number"}}}
+    },
+    {
+      "name": "weather",
+      "description": "Получает данные о погоде",
+      "keywords": ["weather", "temperature", "forecast"],
+      "input_schema": {"type": "object", "properties": {"city": {"type": "string"}, "date": {"type": "string"}}},
+      "output_schema": {"type": "object", "properties": {"temperature": {"type": "number"}, "condition": {"type": "string"}}}
+    }
+  ]
+}

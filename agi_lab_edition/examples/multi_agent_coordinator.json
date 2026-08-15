@@ -1,0 +1,14 @@
+﻿{
+  "name": "MultiAgentCoordinator",
+  "version": "1.0",
+  "description": "Модуль координации многоагентных систем для AGI Lab",
+  "agents": [
+    {"id": "agent-1", "capabilities": ["planning", "analysis", "data_processing"], "role": "planner"},
+    {"id": "agent-2", "capabilities": ["execution", "api_calls", "data_retrieval"], "role": "executor"},
+    {"id": "agent-3", "capabilities": ["verification", "quality_control", "reporting"], "role": "verifier"}
+  ],
+  "coordination_protocols": [
+    {"name": "TaskDistribution", "description": "Агенты распределяют задачи по возможностям"},
+    {"name": "ResourceSharing", "description": "Агенты делят общие ресурсы (данные, инструменты)"}
+  ]
+}
